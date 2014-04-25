@@ -56,8 +56,7 @@ module RelateIQ
     def create(params = {})
       plural = "#{name}s"
       path = "#{plural}/#{self.id}"
-      p = { self.name => params }.to_json
-      resonse = RelateIQ.post(path, p)
+      response = RelateIQ.post(path, params.to_json)
     end
 
     def delete(params = {})

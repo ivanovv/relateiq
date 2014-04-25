@@ -62,7 +62,6 @@ module RelateIQ
         # faraday.response :logger
         faraday.request :json
         faraday.response :json, :content_type => /\bjson$/
-        faraday.use :instrumentation
         faraday.adapter Faraday.default_adapter
       end
       conn.basic_auth(@api_key, @api_secret)
