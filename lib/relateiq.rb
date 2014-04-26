@@ -9,6 +9,7 @@ require File.dirname(__FILE__) + '/relateiq/api_resource'
 
 require File.dirname(__FILE__) + '/relateiq/list'
 require File.dirname(__FILE__) + '/relateiq/contact'
+require File.dirname(__FILE__) + '/relateiq/account'
 
 module RelateIQ
   class << self
