@@ -6,14 +6,8 @@ module RelateIQ
       n.scan(/([A-Z][a-z]*)/).join('-').downcase
     end
 
-    def name
-      n = self.class.to_s.split('::')[-1]
-      # Hyphenize
-      n.scan(/([A-Z][a-z]*)/).join('-').downcase
-    end
-
     def self.find(id, params = {}, url = nil)
-      path = url.nil? ? "#{name}s/#{id}" : url
+      path = url.nil? ? "#{plural}/#{id}" : url
       instance = self.new(id)
       response = RelateIQ.get(path, params)
       instance.refresh_from(response)
@@ -22,8 +16,7 @@ module RelateIQ
 
     def self.all(params = {}, url = nil)
       params = {} unless params.is_a? Hash
-      plural = "#{name}s"
-      path = url.nil? ? "#{plural}" : url
+      path = url.nil? ? plural : url
       response = RelateIQ.get(path, params)
       objects = response['objects'] || []
       list = Array.new
@@ -40,13 +33,12 @@ module RelateIQ
     end
 
     def update(params = {})
-      path = "#{self.name}s/#{self.id}"
+      path = "#{plural}/#{self.id}"
       p = { self.name => params }.to_json
-      response = RelateIQ.put(path, p)
+      response = RelateIQ.put(path, params.to_json)
     end
 
     def self.update(id, params = {})
-      plural = "#{name}s"
       path = "#{plural}/#{id}"
       p = { self.name => params }.to_json
       response = RelateIQ.put(path, p)
@@ -54,22 +46,27 @@ module RelateIQ
 
 
     def create(params = {})
-      plural = "#{name}s"
       path = "#{plural}/#{self.id}"
       response = RelateIQ.post(path, params.to_json)
       self.refresh_from(response)
     end
 
     def delete(params = {})
-      plural = "#{name}s"
       path = "#{plural}/#{self.id}"
       RelateIQ.delete(path)
     end
 
     def self.delete(id, params = {})
-      plural = "#{name}s"
       path = "#{plural}/#{id}"
       RelateIQ.delete(path)
+    end
+
+    def plural
+      "#{self.class.name}s"
+    end
+
+    def self.plural
+      "#{name}s"
     end
   end
 end
