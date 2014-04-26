@@ -57,6 +57,7 @@ module RelateIQ
       plural = "#{name}s"
       path = "#{plural}/#{self.id}"
       response = RelateIQ.post(path, params.to_json)
+      self.refresh_from(response)
     end
 
     def delete(params = {})
